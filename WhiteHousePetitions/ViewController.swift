@@ -62,9 +62,15 @@ class ViewController: UITableViewController {
     }
     
     func submit(_ filterText: String) {
-        guard !filterText.isEmpty else { return }
-        filteredPetitions = petitions.filter { $0.title.lowercased().contains(filterText.lowercased()) || $0.body.lowercased().contains(filterText.lowercased())}
-        tableView.reloadData()
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            guard !filterText.isEmpty else { return }
+            self.filteredPetitions = self.petitions.filter { $0.title.lowercased().contains(filterText.lowercased()) || $0.body.lowercased().contains(filterText.lowercased())}
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     @objc func creditsButtonTapped() {
