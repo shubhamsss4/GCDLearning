@@ -62,7 +62,6 @@ class ViewController: UITableViewController {
     }
     
     func submit(_ filterText: String) {
-        
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             guard !filterText.isEmpty else { return }
